@@ -6,9 +6,9 @@ session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)
 
 r = session.get('https://www.51voa.com/VOA60_1.html')
 
-print(r.content.decode())
 soup = BeautifulSoup(r.content.decode(), 'html.parser')
-print(soup.find(class_='list'))
 for li in soup.find(class_='list').find_all("li"):
-    print(li)
-    print(li.a['href'])
+    r = session.get('https://files.51voa.cn/v'+li.a['href'][11:-5]+'.mp4')
+    print(li.contents[2][1:])
+    with open('./download/'+ li.contents[2][1:] + li.a['href'][12:-11] + '.mp4','wb') as f:
+        f.write(r.content)
